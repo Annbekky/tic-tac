@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hello Kitty Word Tic Tac Toe</title>
+
+<style>
+body{
+margin:0;
+font-family:"Comic Sans MS", cursive;
+background-image:url('https://wallpapers-clan.com/wp-content/uploads/2025/07/hello-kitty-kawaii-pastel-cute-wallpaper.jpg');
+background-size:cover;
+text-align:center;
+}
+
+h1{
+color:white;
+text-shadow:2px 2px 5px hotpink;
+}
+
+#board{
+display:grid;
+grid-template-columns:repeat(3,140px);
+gap:15px;
+justify-content:center;
+margin-top:30px;
+}
+
+.cell{
+background:rgba(255,255,255,0.85);
+border-radius:25px;
+height:140px;
+cursor:pointer;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+transition:0.3s;
+}
+
+.cell:hover{
+transform:scale(1.1);
+background:pink;
+}
+
+.word{
+font-size:20px;
+color:deeppink;
+margin-bottom:5px;
+}
+
+.symbol{
+font-size:40px;
+}
+
+#status{
+color:white;
+font-size:24px;
+margin-top:20px;
+text-shadow:2px 2px 5px hotpink;
+}
+
+button{
+margin-top:20px;
+padding:10px 20px;
+font-size:18px;
+border:none;
+border-radius:20px;
+background:hotpink;
+color:white;
+cursor:pointer;
+}
+
+button:hover{
+background:deeppink;
+}
+</style>
+
+</head>
+<body>
+
+<h1>⭐ Learn Words with Hello Kitty 💖</h1>
+
+<div id="board"></div>
+
+<div id="status">⭐ turn</div>
+
+<button onclick="restart()">Restart</button>
+
+<script>
+let words = [
+"Monday","Tuesday","Wednesday",
+"Thursday","Friday","Saturday",
+"Sunday","Weekend","Weekdays"
+];
+
+let board = ["","","","","","","","",""];
+let player = "⭐";
+let active = true;
+let boardDiv = document.getElementById("board");
+let status = document.getElementById("status");
+
+// создаём клетки
+for(let i=0;i<9;i++){
+    let cell=document.createElement("div");
+    cell.className="cell";
+    cell.onclick=()=>move(i);
+    cell.innerHTML="<div class='word'>"+words[i]+"</div>"+
+                   "<div class='symbol'></div>";
+    boardDiv.appendChild(cell);
+}
+
+let cells=document.getElementsByClassName("cell");
+
+let win=[
+[0,1,2],
+[3,4,5],
+[6,7,8],
+[0,3,6],
+[1,4,7],
+[2,5,8],
+[0,4,8],
+[2,4,6]
+];
+
+function move(i){
+    if(board[i]||!active)return;
+    board[i]=player;
+    cells[i].children[1].innerHTML=player;
+    check();
+    player=player=="⭐"?"💖":"⭐";
+    if(active) status.innerHTML=player+" turn";
+}
+
+function check(){
+    for(let w of win){
+        let a=board[w[0]];
+        let b=board[w[1]];
+        let c=board[w[2]];
+        if(a && a==b && b==c){
+            status.innerHTML=a+" wins! 🎀";
+            active=false;
+            return;
+        }
+    }
+    if(!board.includes("")){
+        status.innerHTML="Draw 🌸";
+        active=false;
+    }
+}
+
+function restart(){
+    board=["","","","","","","","",""];
+    active=true;
+    player="⭐";
+    status.innerHTML="⭐ turn";
+    for(let i=0;i<9;i++){
+        cells[i].children[1].innerHTML="";
+    }
+}
+</script>
+
+</body>
+</html>
